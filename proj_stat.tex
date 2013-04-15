@@ -1,0 +1,175 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\newcommand{\mean}{\mathbb{E}}
+\usepackage[svgnames]{xcolor} % Required to specify font color
+\newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
+\usepackage{graphicx} % Required for box manipulation
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\newcommand*{\titleTH}{\begingroup % Create the command for including the title page in the document
+\raggedleft % Right-align all text
+\vspace*{\baselineskip} % Whitespace at the top of the page
+
+{\Large Bruno Morgado Dal Molin \\ Thomas Ferreira de Lima}\\[0.167\textheight] % Author name
+
+{\textcolor{Red}{\huge MAP 433 \\Introducion aux \\ Méthodes Statistiques}}\\[\baselineskip] % Main title which draws the focus of the reader
+
+{\LARGE\bfseries Estimation de Variance \\par Bootstrap}\\[\baselineskip] % First part of the title, if it is unimportant consider making the font size smaller to accentuate the main title
+
+{\Large \textit{Professeur Marc Hoffmann}}\par % Tagline or further description
+
+\vfill % Whitespace between the title block and the publisher
+\vspace{2in}
+%{\large The Publisher \plogo}\par % Publisher and logo
+
+\vspace*{3\baselineskip} % Whitespace at the bottom of the page
+\endgroup}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\pagestyle{empty} % Removes page numbers
+
+\titleTH % This command includes the title page
+
+
+\section {Introduction}
+	On considère le problème de l'estimation d'un paramètre de translation $\displaystyle \vartheta\in\mathbb{R}$
+à partir de l'observation de la réalisation de n variables aléatoires indépendantes et identiquement distribuées
+$\displaystyle (X_1,...,X_n)$ de loi commune
+
+$$ \mathbb{P}[X_1\in A]= \int_{\cal A} g(x-\vartheta)dx,$$
+pour tout ensemble borélien $\displaystyle A $ de $\displaystyle \mathbb{R}$, et où $\displaystyle x \leadsto g(x)$ est une densité de   probabilité inconnue vérifiant :
+
+$$ \int_{\cal \mathbb{R}} xg(x)dx =0 , v^2 = \int_{\cal \mathbb{R}} x^2g(x)dx < +\infty,$$
+
+Un estimateur naturel de $\displaystyle \vartheta$ est la moyenne empirique $\displaystyle \bar X_n = \frac{1}{n} \sum_{i=1}^n X_i$. On étudie dans ce projet la précision
+d'estimation de $\displaystyle \bar X_n$, en particulier lorsque n n'est pas très grand, via la méthode de Bootstrap, introduite par Efron en 1979.
+%%%%%%%%%%%%%%%%%%%%%%
+\section {Comportement asymptotique de la variance empirique}
+%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+Par le Théorème de Grands Nombres on voit que:
+$$\mean [X_i] = \int_{A}xg(x-\vartheta)dx=\int_{A}(x-\vartheta)g(x-\vartheta)dx+\int_{A}\vartheta g(x-\vartheta)dx$$
+$$=\int_{A}y g(y)dy+\vartheta\int_{A}g(x-\vartheta)dx= \vartheta$$
+$$\bar X_n = \frac{1}{n}\sum_{i=1}^nX_i  \overset{\mathrm{{L}^2} et p.s.}{\longrightarrow}\vartheta \ lorsque\ n \rightarrow +\infty $$
+
+Donc, on a toutes les hypothèses du TCL pour affirmer que:
+
+$$\sqrt{n}(\vartheta - \bar X_n) \overset{d}{\longrightarrow} \mathcal{N} (0, v^2) $$
+ou encore que $$\xi_n = \sqrt{n}(\bar X_n - \vartheta) \overset{d}{\longrightarrow} \mathcal{N} (0, v^2) $$
+
+De cette façon, $$\mathbb{P}[\vartheta \in I_{n,\alpha}(\vartheta)]= \mathbb{P}[\bar X_n-\frac{v}{\sqrt{n}}\Phi^{-1}(1-\alpha/2)\leq \bar X_n-\frac{v}{\sqrt{n}}\xi_n\leq\bar X_n+\frac{v}{\sqrt{n}}\Phi^{-1}(1-\alpha/2)]$$
+$$=\mathbb{P}[-\Phi^{-1}(1-\alpha/2)\leq \xi_n \leq\Phi^{-1}(1-\alpha/2)]$$
+
+Comme $\displaystyle \lim_{n \to \infty}\mathbb{P}(\xi_n \leq x)=\Phi(x) = \int_{-\infty}^xe^{-u^2/2}\frac{du}{\sqrt{2\pi}}$, on peut faire,
+$$\lim_{n \to \infty}\mathbb{P}[-\Phi^{-1}(1-\alpha/2)\leq \xi_n \leq\Phi^{-1}(1-\alpha/2)]=\lim_{n \to \infty}\mathbb{P}[\xi_n \leq\Phi^{-1}(1-\alpha/2)]-\lim_{n \to \infty}\mathbb{P}[\xi_n \leq\Phi^{-1}(\alpha/2)]$$
+$$\lim_{n \to \infty}\mathbb{P}[\vartheta \in I_{n,\alpha}(\vartheta)]=1-\alpha/2-\alpha/2=1-\alpha$$
+%%%%%%%%%%%%%%%%%%%%%%
+
+On observe que, en utilisant l'inégalité donnée $\displaystyle\frac{x}{(1+x^2)} \geq \frac{1}{2x}$ pour $\displaystyle |x|\geq 1$
+Alors, $$\int_{x}^{+\infty}\frac{-(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt=\frac{x}{1+x^2}\frac{e^{-x^2/2}}{\sqrt{2\pi}} \geq \frac{e^{-x^2/2}}{2x\sqrt{2\pi}}$$
+encore pour $\displaystyle |x| \geq 0,442358$ on peut utiliser le fait que $\displaystyle \frac{1}{\sqrt{2\pi}}\geq\frac{-(t^4+2t^2-1)}{(t^2+1)^2} $,
+$$1-\Phi(x)=\int_x^{+\infty}\frac{e^{-t^2/2}}{\sqrt{2\pi}}dt\geq\int_{x}^{+\infty}\frac{-(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt $$
+On conclut que:
+$$1-\Phi(x)\geq\frac{e^{-x^2/2}}{2x\sqrt{2\pi}}$$
+On utilise ce résultat pour étudier la relation du niveau de risque $\displaystyle \alpha$ et le nombre d'observations $\displaystyle n$: \\
+
+$ \left\{
+\begin{array}{ll}
+\displaystyle 2x\sqrt{2\pi}(1-\phi(x))\geq e^{-x^2/2} \\ \\
+\displaystyle 1-\Phi(x) = \alpha/2
+\end{array}
+\right.
+$
+$\Longrightarrow \ \ \ \ 2x\sqrt{2\pi}(\alpha/2)\geq e^{-{(\phi^{-1}(1-\alpha/2))}^2/2}$
+\\ \\
+Ce qui nous donne:
+$$\phi^{-1}(1-\frac{\alpha}{2})\leq \sqrt{2ln\frac{\alpha}{2}}$$
+
+$$e^{-\frac{x^2}{2}} \leq 2\sqrt{2\pi}x(1-\phi(x))$$
+$$e^{-\frac{1}{2}\left[\phi^{-1}\left(1-\frac{\alpha}{2}\right)\right]^2} \leq \sqrt{2\pi}\alpha\phi^{-1}\left(1-\frac{\alpha}{2}\right)$$
+usando a parada do exo
+$$e^{-\frac{1}{2}\left[\phi^{-1}\left(1-\frac{\alpha}{2}\right)\right]^2} \leq \sqrt{2\pi}\alpha\sqrt{2ln\frac{1}{\alpha}}$$
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+Dans cette question, on utilise la \textbf{proposition 3.7} du policopie du cours:
+\vspace{0.2in}
+
+Si la fonctionnelle $\displaystyle T(F)$ admet la répresentation
+$$T(F)=h\left(\int_{\mathbb{R}}g(x)dF(dx)\right)$$
+où $\displaystyle \int_{\mathbb{R}}|g(x)|dF(dx)<+\infty$ et $\displaystyle h: \mathbb{R}\rightarrow\mathbb{R}$continue, alors,
+$$ T(\hat F_n)\overset{p.s.}{\longrightarrow}T(F)$$
+\vspace{0.2in}
+
+Ayant $\displaystyle V_n=\frac{1}{n}\sum_{i=1}^n(X_i -\bar X_ n)^2=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2$,
+$$v^2=\int_{\mathbb{R}}(x-m(\mathbb{P}))^2d\mathbb{P}(x)=\int_{\mathbb{R}}x^2d\mathbb{P}(x)-\left({\int_{\mathbb{R}}xd\mathbb{P}(x)}\right)^2$$
+$$V_n=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2=h_1\left(\int_{\mathbb{R}}g_1(x)d\mathbb{P}(dx)\right)-h_2\left(\int_{\mathbb{R}}g_2(x)d\mathbb{P}(dx)\right)$$
+pour les fonctions continues suivantes,
+$ \left\{
+\begin{array}{ll}
+\displaystyle h_1(x)=x \\ \\
+\displaystyle g_1(x)=x^2
+\end{array}
+\right.
+$et
+$ \left\{
+\begin{array}{ll}
+\displaystyle h_2(x)=x^2 \\ \\
+\displaystyle g_2(x)=x
+\end{array}
+\right.
+$.
+%%%%%%%%%%%%%%%%%%%%%%
+\\ {\Huge Daqui pra frente é ladainha mas deixe aí que talvez precise}
+
+
+Il nous est proposé l'approximation suivante:
+$$\vartheta=\bar X_n + \frac{v}{\sqrt{n}}\xi_n$$
+On cherche donc la fonction de vraisemblance associé à l'expérience produit,
+$$\vartheta \in \Theta \leadsto \mathcal{L}_n(\vartheta,X_1,...,X_n )= \prod_{i=1}^nf(\vartheta,X_i) $$
+En sachant la loi de $\displaystyle \xi_n$ et sa distribuition, on trouve,
+$$\mathbb{P}(dx)=\frac{1}{\sqrt{2\pi v^2}}e^{-n(\vartheta-\bar x_n)/2}dx$$
+Comme $\displaystyle \mu(dx)>> \mathbb{P}(dx)$, on peut faire $\displaystyle f(\vartheta)=\frac{1}{\sqrt{2\pi v^2}}e^{-n(\vartheta-\bar x_n)/2}$
+
+Alors,
+$$\mathcal{L}_n(\vartheta,X_1,...,X_n )=(2\pi v^2)^{-n/2}e^{-n/2\sum_{i=1}^n(\vartheta - \bar X_ n)}$$
+$$\ell_n(\vartheta,X_1,...,X_n )=-\frac{n}{2}(2\pi v^2)-\frac{n^2}{2}(\vartheta-\bar X_n)^2$$
+$$\frac{d\ell_n}{d\vartheta}(\vartheta,X_1,...,X_n )=0 \Rightarrow\hat \vartheta_n=\frac{1}{n}\sum_{i=1}^nX_i$$
+Donc $\displaystyle \vartheta$ est bien le estimateur par la moyenne empirique.
+
+
+
+En ayant la suite de variables aléatoires $\displaystyle (X_1,...,X_n) $ iid de même loi de distribuition $\displaystyle g(x)$ dont:
+$$\mu = \mean[X_i] = 0 \Rightarrow \mean[\sum_{i=1}^n X_i ] = 0 $$
+Encore pour la variance, on appelle
+
+$$\displaystyle v^2 = \int_{\cal \mathbb{R}} x^2g(x)dx = \mean[X_i^2]$$
+puis que
+$$\displaystyle Var[X_i] = \mean[X_i^2]-\mean^2[X_i] $$
+De cette façon,
+$$v_{somme}^2=\mean[\sum_{i=1}^n X_i ]= nv^2$$
+
+
+On se rappelle donc que $\displaystyle\vartheta = \bar X_n + \frac{v}{\sqrt{n}}\xi_n$ est valable selon les données précedentes et l'application direct du Théorème Central Limite.
+
+Alors, pour $\displaystyle \alpha\in(0,1)$,
+$$\mathbb{P}(|\bar X_n |<\varepsilon)>1-\alpha$$
+$$\lim_{n \to \infty}\mathbb{P}(\xi_n \leq \varepsilon)=\Phi(x) = \int_{-\infty}^xe^{-u^2/2}\frac{du}{\sqrt{2\pi}}$$
+
+\end{document}
