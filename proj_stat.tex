@@ -8,6 +8,9 @@
 \usepackage{mathtools}
 \usepackage{amsmath}
 \newcommand{\mean}{\mathbb{E}}
+\newcommand{\var}{\mathrm{Var}}
+\newcommand{\R}{\mathbb{R}}
+\def\longlongrightarrow{\relbar\joinrel\relbar\joinrel\relbar\joinrel\rightarrow}
 \usepackage[svgnames]{xcolor} % Required to specify font color
 \newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
 \usepackage{graphicx} % Required for box manipulation
@@ -47,14 +50,14 @@
 
 
 \section {Introduction}
-	On considère le problème de l'estimation d'un paramètre de translation $\displaystyle \vartheta\in\mathbb{R}$
+	On considère le problème de l'estimation d'un paramètre de translation $\displaystyle \vartheta\in\R$
 à partir de l'observation de la réalisation de n variables aléatoires indépendantes et identiquement distribuées
 $\displaystyle (X_1,...,X_n)$ de loi commune
 
 $$ \mathbb{P}[X_1\in A]= \int_{\cal A} g(x-\vartheta)dx,$$
-pour tout ensemble borélien $\displaystyle A $ de $\displaystyle \mathbb{R}$, et où $\displaystyle x \leadsto g(x)$ est une densité de   probabilité inconnue vérifiant :
+pour tout ensemble borélien $\displaystyle A $ de $\displaystyle \R$, et où $\displaystyle x \leadsto g(x)$ est une densité de   probabilité inconnue vérifiant :
 
-$$ \int_{\cal \mathbb{R}} xg(x)dx =0 , v^2 = \int_{\cal \mathbb{R}} x^2g(x)dx < +\infty,$$
+$$ \int_{\cal \R} xg(x)dx =0 , v^2 = \int_{\cal \R} x^2g(x)dx < +\infty,$$
 
 Un estimateur naturel de $\displaystyle \vartheta$ est la moyenne empirique $\displaystyle \bar X_n = \frac{1}{n} \sum_{i=1}^n X_i$. On étudie dans ce projet la précision
 d'estimation de $\displaystyle \bar X_n$, en particulier lorsque n n'est pas très grand, via la méthode de Bootstrap, introduite par Efron en 1979.
@@ -62,49 +65,70 @@ d'estimation de $\displaystyle \bar X_n$, en particulier lorsque n n'est pas tr�
 \section {Comportement asymptotique de la variance empirique}
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{}
-Par le Théorème de Grands Nombres on voit que:
-$$\mean [X_i] = \int_{A}xg(x-\vartheta)dx=\int_{A}(x-\vartheta)g(x-\vartheta)dx+\int_{A}\vartheta g(x-\vartheta)dx$$
-$$=\int_{A}y g(y)dy+\vartheta\int_{A}g(x-\vartheta)dx= \vartheta$$
-$$\bar X_n = \frac{1}{n}\sum_{i=1}^nX_i  \overset{\mathrm{{L}^2} et p.s.}{\longrightarrow}\vartheta \ lorsque\ n \rightarrow +\infty $$
+Pour appliquer le TCL il suffit de montrer que $\mean[\bar{X}_i] = \vartheta$ et que $\var[\bar{X}_i] = v^2 < +\infty $. Or,
+$$\mean [X_i] = \int_{\R}xg(x-\vartheta)dx=\int_{\R}(x-\vartheta)g(x-\vartheta)dx+\int_{\R}\vartheta g(x-\vartheta)dx$$
+$$=\int_{\R}y g(y)dy+\vartheta\int_{\R}g(x-\vartheta)dx= \vartheta$$
 
-Donc, on a toutes les hypothèses du TCL pour affirmer que:
+$$\var[X_i] = \mean[X_i^2] - \mean[X_i]^2 = \int_{\R}x^2g(x-\vartheta)dx - \vartheta^2 = $$
+$$ = \int_{\R}(x-\vartheta)^2g(x-\vartheta)dx + \int_{\R}2\vartheta(x-\vartheta)g(x-\vartheta)dx + \int_{\R}\vartheta^2 g(x-\vartheta)dx - \vartheta^2 = $$
+
+$$= \int_{\R}(x-\vartheta)^2g(x-\vartheta)dx = v^2 < + \infty$$
+
+Le TCL nous permet donc d'affirmer que:
 
 $$\sqrt{n}(\vartheta - \bar X_n) \overset{d}{\longrightarrow} \mathcal{N} (0, v^2) $$
-ou encore que $$\xi_n = \sqrt{n}(\bar X_n - \vartheta) \overset{d}{\longrightarrow} \mathcal{N} (0, v^2) $$
+ou encore $$\xi_n = \frac{\sqrt{n}}{v}(\bar X_n - \vartheta) \overset{d}{\longrightarrow} \mathcal{N} (0, 1) $$
 
-De cette façon, $$\mathbb{P}[\vartheta \in I_{n,\alpha}(\vartheta)]= \mathbb{P}[\bar X_n-\frac{v}{\sqrt{n}}\Phi^{-1}(1-\alpha/2)\leq \bar X_n-\frac{v}{\sqrt{n}}\xi_n\leq\bar X_n+\frac{v}{\sqrt{n}}\Phi^{-1}(1-\alpha/2)]$$
+Ainsi, $$\mathbb{P}[\vartheta \in I_{n,\alpha}(v)]= \mathbb{P}[\bar X_n-\frac{v}{\sqrt{n}}\Phi^{-1}(1-\alpha/2)\leq \bar X_n-\frac{v}{\sqrt{n}}\xi_n\leq\bar X_n+\frac{v}{\sqrt{n}}\Phi^{-1}(1-\alpha/2)]$$
 $$=\mathbb{P}[-\Phi^{-1}(1-\alpha/2)\leq \xi_n \leq\Phi^{-1}(1-\alpha/2)]$$
 
-Comme $\displaystyle \lim_{n \to \infty}\mathbb{P}(\xi_n \leq x)=\Phi(x) = \int_{-\infty}^xe^{-u^2/2}\frac{du}{\sqrt{2\pi}}$, on peut faire,
-$$\lim_{n \to \infty}\mathbb{P}[-\Phi^{-1}(1-\alpha/2)\leq \xi_n \leq\Phi^{-1}(1-\alpha/2)]=\lim_{n \to \infty}\mathbb{P}[\xi_n \leq\Phi^{-1}(1-\alpha/2)]-\lim_{n \to \infty}\mathbb{P}[\xi_n \leq\Phi^{-1}(\alpha/2)]$$
-$$\lim_{n \to \infty}\mathbb{P}[\vartheta \in I_{n,\alpha}(\vartheta)]=1-\alpha/2-\alpha/2=1-\alpha$$
+Puisque $\xi_n \overset{d}{\longrightarrow} \mathcal{N} (0, 1)$, on a que $\displaystyle \lim_{n \to \infty}\mathbb{P}(\xi_n \leq x)=\Phi(x) = \int_{-\infty}^xe^{-u^2/2}\frac{du}{\sqrt{2\pi}}$. D'où
+$$\lim_{n \to \infty}\mathbb{P}[-\Phi^{-1}(1-\alpha/2)\leq \xi_n \leq\Phi^{-1}(1-\alpha/2)]=$$
+$$=\lim_{n \to \infty}\mathbb{P}[\xi_n \leq\Phi^{-1}(1-\alpha/2)]-\lim_{n \to \infty}\mathbb{P}[\xi_n \leq\Phi^{-1}(\alpha/2)]$$
+$$\Longrightarrow\lim_{n \to \infty}\mathbb{P}[\vartheta \in I_{n,\alpha}(v)]=1-\alpha/2-\alpha/2=1-\alpha$$
 %%%%%%%%%%%%%%%%%%%%%%
 
-On observe que, en utilisant l'inégalité donnée $\displaystyle\frac{x}{(1+x^2)} \geq \frac{1}{2x}$ pour $\displaystyle |x|\geq 1$
-Alors, $$\int_{x}^{+\infty}\frac{-(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt=\frac{x}{1+x^2}\frac{e^{-x^2/2}}{\sqrt{2\pi}} \geq \frac{e^{-x^2/2}}{2x\sqrt{2\pi}}$$
-encore pour $\displaystyle |x| \geq 0,442358$ on peut utiliser le fait que $\displaystyle \frac{1}{\sqrt{2\pi}}\geq\frac{-(t^4+2t^2-1)}{(t^2+1)^2} $,
-$$1-\Phi(x)=\int_x^{+\infty}\frac{e^{-t^2/2}}{\sqrt{2\pi}}dt\geq\int_{x}^{+\infty}\frac{-(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt $$
+On observe que $\displaystyle\int_{x}^{+\infty}\frac{(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt=\frac{x}{1+x^2}e^{-x^2/2}$ et, en utilisant l'inegalité donnée $\displaystyle\frac{x}{(1+x^2)} \geq \frac{1}{2x}$ pour $\displaystyle |x|\geq 1$, on obtient:
+
+$$\int_{x}^{+\infty}\frac{(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt=\frac{x}{1+x^2}e^{-x^2/2} \geq \frac{e^{-x^2/2}}{2x}$$
+
+On note aussi que $\displaystyle \frac{(t^4+2t^2-1)}{(t^2+1)^2} < 1 \ \forall t$, d'où:
+$$1-\Phi(x)=\int_x^{+\infty}\frac{e^{-t^2/2}}{\sqrt{2\pi}}dt > \frac{1}{\sqrt{2\pi}}\int_{x}^{+\infty}\frac{(t^4+2t^2-1)}{(t^2+1)^2}e^{-t^2/2}dt =$$
+
+$$ = \frac{x}{1+x^2}\frac{e^{-x^2/2}}{\sqrt{2\pi}} \geq \frac{e^{-x^2/2}}{2x\sqrt{2\pi}}$$
 On conclut que:
-$$1-\Phi(x)\geq\frac{e^{-x^2/2}}{2x\sqrt{2\pi}}$$
-On utilise ce résultat pour étudier la relation du niveau de risque $\displaystyle \alpha$ et le nombre d'observations $\displaystyle n$: \\
+$$1-\Phi(x)>\frac{e^{-x^2/2}}{2x\sqrt{2\pi}},\ \mathrm{pour}\ |x| \geq 1$$
+
+Une autre inegalité est aussi importante pour la suite: $\displaystyle 1-\Phi(x) \leq \frac{1}{2} e^{-x^2/2}$. Demonstration:
+
+$$1-\Phi(x) = \int_x^{+\infty} \frac{e^{-t^2/2}}{\sqrt{2\pi}} dt = \int_0^{+\infty} \frac{e^{-(t+x)^2/2}}{\sqrt{2\pi}} dt =$$
+$$= \int_0^{+\infty} \frac{e^{-(t^2+x^2+2tx)/2}}{\sqrt{2\pi}} dt \leq \frac{e^{-x^2/2}}{\sqrt{2\pi}} \int_0^{+\infty} e^{-t^2/2} dt = \frac{e^{-x^2/2}}{2} $$
+
+On utilise ces résultats pour étudier la relation du niveau de risque $\displaystyle \alpha$ et le nombre d'observations $\displaystyle n$: \\
 
 $ \left\{
 \begin{array}{ll}
-\displaystyle 2x\sqrt{2\pi}(1-\phi(x))\geq e^{-x^2/2} \\ \\
+\displaystyle 2x\sqrt{2\pi}(1-\Phi(x))\geq e^{-x^2/2} \\ \\
 \displaystyle 1-\Phi(x) = \alpha/2
 \end{array}
 \right.
+\Longrightarrow
 $
-$\Longrightarrow \ \ \ \ 2x\sqrt{2\pi}(\alpha/2)\geq e^{-{(\phi^{-1}(1-\alpha/2))}^2/2}$
-\\ \\
-Ce qui nous donne:
-$$\phi^{-1}(1-\frac{\alpha}{2})\leq \sqrt{2ln\frac{\alpha}{2}}$$
+$ \left\{
+\begin{array}{ll}
+\displaystyle 2x\sqrt{2\pi}(\alpha/2)\geq e^{-{(\Phi^{-1}(1-\alpha/2))}^2/2} \\ \\
+\displaystyle \alpha \leq e^{-x^2/2} \Rightarrow x \leq \sqrt{2\log\left(\frac{1}{\alpha}\right)}
+\end{array}
+\right.
+$
 
-$$e^{-\frac{x^2}{2}} \leq 2\sqrt{2\pi}x(1-\phi(x))$$
-$$e^{-\frac{1}{2}\left[\phi^{-1}\left(1-\frac{\alpha}{2}\right)\right]^2} \leq \sqrt{2\pi}\alpha\phi^{-1}\left(1-\frac{\alpha}{2}\right)$$
-usando a parada do exo
-$$e^{-\frac{1}{2}\left[\phi^{-1}\left(1-\frac{\alpha}{2}\right)\right]^2} \leq \sqrt{2\pi}\alpha\sqrt{2ln\frac{1}{\alpha}}$$
 
+Ce qui nous donne directement:
+
+$$e^{-\frac{1}{2}\left[\Phi^{-1}\left(1-\frac{\alpha}{2}\right)\right]^2} \leq \alpha\sqrt{4\pi\log\left(\frac{1}{\alpha}\right)}$$
+$$\Longrightarrow \Phi^{-1}\left(1-\frac{\alpha}{2}\right) \geq \sqrt{2} \log\left(\alpha\sqrt{4\pi\log\left(\frac{1}{\alpha}\right)}\right)^{-\frac{1}{2}} \underset{\alpha \rightarrow 0}{\longlongrightarrow} +\infty$$
+
+Cette inegalité nous permet d'estimer l'échelle de la fonction $\Phi^{-1}\left(1-\frac{\alpha}{2}\right)$, et donc d'estimer combien il faut augmenter $n$ pour améliorer la précision $\alpha$, en préservant la même précision d'estimation.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{}
@@ -112,14 +136,14 @@ Dans cette question, on utilise la \textbf{proposition 3.7} du policopie du cour
 \vspace{0.2in}
 
 Si la fonctionnelle $\displaystyle T(F)$ admet la répresentation
-$$T(F)=h\left(\int_{\mathbb{R}}g(x)dF(dx)\right)$$
-où $\displaystyle \int_{\mathbb{R}}|g(x)|dF(dx)<+\infty$ et $\displaystyle h: \mathbb{R}\rightarrow\mathbb{R}$continue, alors,
+$$T(F)=h\left(\int_{\R}g(x)dF(dx)\right)$$
+où $\displaystyle \int_{\R}|g(x)|dF(dx)<+\infty$ et $\displaystyle h: \R\rightarrow\R$continue, alors,
 $$ T(\hat F_n)\overset{p.s.}{\longrightarrow}T(F)$$
 \vspace{0.2in}
 
 Ayant $\displaystyle V_n=\frac{1}{n}\sum_{i=1}^n(X_i -\bar X_ n)^2=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2$,
-$$v^2=\int_{\mathbb{R}}(x-m(\mathbb{P}))^2d\mathbb{P}(x)=\int_{\mathbb{R}}x^2d\mathbb{P}(x)-\left({\int_{\mathbb{R}}xd\mathbb{P}(x)}\right)^2$$
-$$V_n=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2=h_1\left(\int_{\mathbb{R}}g_1(x)d\mathbb{P}(dx)\right)-h_2\left(\int_{\mathbb{R}}g_2(x)d\mathbb{P}(dx)\right)$$
+$$v^2=\int_{\R}(x-m(\mathbb{P}))^2d\mathbb{P}(x)=\int_{\R}x^2d\mathbb{P}(x)-\left({\int_{\R}xd\mathbb{P}(x)}\right)^2$$
+$$V_n=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2=h_1\left(\int_{\R}g_1(x)d\mathbb{P}(dx)\right)-h_2\left(\int_{\R}g_2(x)d\mathbb{P}(dx)\right)$$
 pour les fonctions continues suivantes,
 $ \left\{
 \begin{array}{ll}
@@ -159,7 +183,7 @@ En ayant la suite de variables aléatoires $\displaystyle (X_1,...,X_n) $ iid de
 $$\mu = \mean[X_i] = 0 \Rightarrow \mean[\sum_{i=1}^n X_i ] = 0 $$
 Encore pour la variance, on appelle
 
-$$\displaystyle v^2 = \int_{\cal \mathbb{R}} x^2g(x)dx = \mean[X_i^2]$$
+$$\displaystyle v^2 = \int_{\cal \R} x^2g(x)dx = \mean[X_i^2]$$
 puis que
 $$\displaystyle Var[X_i] = \mean[X_i^2]-\mean^2[X_i] $$
 De cette façon,
