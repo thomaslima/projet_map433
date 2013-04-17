@@ -25,7 +25,7 @@
 
 {\Large Bruno Morgado Dal Molin \\ Thomas Ferreira de Lima}\\[0.167\textheight] % Author name
 
-{\textcolor{Red}{\huge MAP 433 \\Introducion aux \\ Méthodes Statistiques}}\\[\baselineskip] % Main title which draws the focus of the reader
+{\textcolor{Red}{\huge MAP 433 \\Introduction aux \\ Méthodes Statistiques}}\\[\baselineskip] % Main title which draws the focus of the reader
 
 {\LARGE\bfseries Estimation de Variance \\par Bootstrap}\\[\baselineskip] % First part of the title, if it is unimportant consider making the font size smaller to accentuate the main title
 
@@ -139,11 +139,13 @@ Si la fonctionnelle $\displaystyle T(F)$ admet la répresentation
 $$T(F)=h\left(\int_{\R}g(x)dF(dx)\right)$$
 où $\displaystyle \int_{\R}|g(x)|dF(dx)<+\infty$ et $\displaystyle h: \R\rightarrow\R$continue, alors,
 $$ T(\hat F_n)\overset{p.s.}{\longrightarrow}T(F)$$
-\vspace{0.2in}
-
-Ayant $\displaystyle V_n=\frac{1}{n}\sum_{i=1}^n(X_i -\bar X_ n)^2=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2$,
-$$v^2=\int_{\R}(x-m(\mathbb{P}))^2d\mathbb{P}(x)=\int_{\R}x^2d\mathbb{P}(x)-\left({\int_{\R}xd\mathbb{P}(x)}\right)^2$$
-$$V_n=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2=h_1\left(\int_{\R}g_1(x)d\mathbb{P}(dx)\right)-h_2\left(\int_{\R}g_2(x)d\mathbb{P}(dx)\right)$$
+\\
+De cette façon, en ayant $\displaystyle V_n=\frac{1}{n}\sum_{i=1}^n(X_i -\bar X_ n)^2=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2$,
+$$V_n=\frac{1}{n}\sum_{i=1}^nX_i^2-\bar X_n^2=\frac{1}{n}\sum_{i=1}^nX_i^2-\left(\frac{1}{n}\sum_{i=1}^nX_i\right)$$
+Et en choisissant des fonctions réguliers satisfaisant les hypothèses de la proposition,
+$$=h_{1}\left(\frac{1}{n}\sum_{i=1}^n g_{1}(X_i)\right)-h_{2}\left(\frac{1}{n}\sum_{i=1}^n g_{2}(X_i)\right)\overset{d}{\longrightarrow}$$
+$$=h_1\left(\int_{\R}g_1(x)d\mathbb{P}(dx)\right)-h_2\left(\int_{\R}g_2(x)d\mathbb{P}(dx)\right)$$
+$$=\int_{\R}x^2d\mathbb{P}(x)-\left({\int_{\R}xd\mathbb{P}(x)}\right)^2=\int_{\R}(x-m(\mathbb{P}))^2d\mathbb{P}(x)=v^2$$
 pour les fonctions continues suivantes,
 $ \left\{
 \begin{array}{ll}
@@ -159,7 +161,63 @@ $ \left\{
 \end{array}
 \right.
 $.
+Alors on peut affirmer,
+$$v_{n}^2\overset{p.s.}{\longrightarrow}v^2$$
+En prenant le résultat de la question précédente, on aura les conditions nécessaires pour appliquer le lemme de Slutsky,
+$$ \left\{
+\begin{array}{ll}
+\displaystyle \frac{v_{n}}{v}\overset{\mathbb{P}}{\longrightarrow} 1\\ \\
+\displaystyle \sqrt{n}(\theta-\bar X_{n})\overset{d}{\longrightarrow}\mathcal{N}(0,v^2)
+\end{array}
+\right.
+$$
+Donc,
+$$\frac{\sqrt{n}(\theta-\bar X_{n})v}{v_{n}}\overset{d}{\longrightarrow}\mathcal{N}(0,v^2)$$
+finalement,
+$$ \sqrt{n}(\theta-\bar X_{n})\overset{d}{\longrightarrow}\mathcal{N}(0,v_{n}^{2})$$
+Pour avoir encore les résultats de la question précédente concernant le niveau de risque et intervalle de confiance, il faut se rappeler que $\displaystyle V_{n}^{1/2}$ est définie comme $\displaystyle v_{n}$ et se ramener au résultat ci-dessus.
+\section{Le ré-échantillonage par Bootstrap}
+\subsection{}
+On utilise la théorie d'estimation empirique de la fonction répartition en définissant pour a et b des fonctions régulières,
+$$T(\hat F_{M})=a\left(\frac{1}{M}\sum_{j=1}^{M}b(X_{j}^{*})\right)\overset{p.s.}{\longrightarrow}T(F)=a\left(\mean_{\mathbb{Q}_{n}} [b(X^{*})]\right)$$
+alors, on a la convergence dans le cas régulier lorsque $\displaystyle M\to \infty$ en prenant,
+\\
+
+$ \left\{
+\begin{array}{ll}
+\displaystyle a(x)=x \\ \\
+\displaystyle b(x)=h(x)
+\end{array}
+\right.
+$
+$\Longrightarrow \frac{1}{M}\sum_{j=1}^{M}h(X_{j}^{*})\overset{p.s.}{\longrightarrow}\mean_{\mathbb{Q}_n} [h(X^{*})]$
+\vspace{0.5 cm}
+\\
+En analysant la vitesse de convergence dans le cas régulier ont voit que,
+$$\sqrt{n}\left(\frac{1}{M}\sum_{j=1}^{M}h(X_{j}^{*})-\mean_{\mathbb{Q}_{n}} [h(X^{*})]\right)\overset{d}{\longrightarrow}\mathcal{N}(0,v(F))$$
+pour $\displaystyle v(F)=a'(\mean[b(X^{*})])^2Var(b(X^{*}))=Var[h(X^{*})]$ \\ \\
+D'où on conclut la première égalité $\displaystyle \frac{1}{M}\sum_{j=1}^{M}h(X_{j}^{*}) \approx \mean_{\mathbb{Q_{n}}} [h(X^{*})]$.
+\\
+Pour la deuxième, on se ramène à la définition des variables aléatoires $\displaystyle X^*$ de loi $\displaystyle \mathbb{P}(X^*=X)=1/n$ d'après son caractère uniforme par rapport à l'échantillon de X,
+$$\mean_{\mathbb{Q_{n}}} [h(X^{*})]=\sum_{i=1}^{n}\mathbb{P}(X^*=X_i)h(X_i)=\sum_{i=1}^{n}\frac{1}{n}h(X_i)=\frac{1}{n}\sum_{i=1}^{n}h(X_i)$$
+Alors,
+$$\mean_{\mathbb{Q_{n}}} [h(X^{*})]=\frac{1}{n}\sum_{i=1}^{n}h(X_i)$$
+Pour la troisième égalité, on utilise un processus analogue à celui de la première. On prend des fonctions régulières a et b identiques à celles prises pour la première partie et on fait,
+$$T(\hat F_{M})=a\left(\frac{1}{M}\sum_{i=1}^{M}b(X_{i})\right)\overset{p.s.}{\longrightarrow}T(F)=a\left(\int_{\mathbb{R}} b(X)g(x-\theta)dx\right)$$
+De cette façon, on aura,
+$$ \frac{1}{M}\sum_{i=1}^{M}h(X_{i})\overset{p.s.}{\longrightarrow}\int_{\mathbb{R}} h(X)g(x-\theta)dx$$
+Ainsi que,
+$$\sqrt{n}\left(\frac{1}{M}\sum_{i=1}^{M}h(X_{i})-\int_{\mathbb{R}} h(X)g(x-\theta)dx\right)\overset{d}{\longrightarrow}\mathcal{N}(0,v(F))$$
+pour $\displaystyle v(F)=a'(\mean[b(X^{*})])^2\cdot\var(b(X^{*}))=\var[h(X)]$
+\vspace{0.5cm} \\
+D'où, finalement, on conclut la dernière égalité,
+\\ $\displaystyle \frac{1}{M}\sum_{i=1}^{M}h(X_{i}) \approx \int_{\mathbb{R}} h(X)g(x-\theta)dx$
+\vspace{1 cm}
 %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+\\
+\\
 \\ {\Huge Daqui pra frente é ladainha mas deixe aí que talvez precise}
 
 
@@ -197,3 +255,5 @@ $$\mathbb{P}(|\bar X_n |<\varepsilon)>1-\alpha$$
 $$\lim_{n \to \infty}\mathbb{P}(\xi_n \leq \varepsilon)=\Phi(x) = \int_{-\infty}^xe^{-u^2/2}\frac{du}{\sqrt{2\pi}}$$
 
 \end{document}
+
+
