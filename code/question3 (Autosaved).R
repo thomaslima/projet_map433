@@ -35,7 +35,7 @@ bootstrap <- function (n, theta, distr, M) {
 	print(paste("mean(X_n)=", mean(X_n)));
 }
 
-bootstrap(100, 0.1, gbernoulli, 10000);
+bootstrap(100, 10, gbernoulli, 10000);
 
 
 # Question 4
