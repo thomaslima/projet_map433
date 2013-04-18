@@ -21,6 +21,10 @@ gbernoulli <- function (n, theta, p = 0.5, sd = 1) {
 	return ((rbern(n, p) - p) * factor + theta);
 }
 
+# Fonction Variance
+variance <- function (x)
+	return(sum((x-mean(x))^2)/length(x));
+
 # Algorithme Bootstrap
 bootstrap <- function (n, theta, distr, M) {
 	X_n = distr(n, theta);
