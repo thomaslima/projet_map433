@@ -1,4 +1,3 @@
-%----------------------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
@@ -213,47 +212,33 @@ pour $\displaystyle v(F)=a'(\mean[b(X^{*})])^2\cdot\var(b(X^{*}))=\var[h(X)]$
 D'où, finalement, on conclut la dernière égalité,
 \\ $\displaystyle \frac{1}{M}\sum_{i=1}^{M}h(X_{i}) \approx \int_{\mathbb{R}} h(X)g(x-\theta)dx$
 \vspace{1 cm}
+\section{Bootstrap par percentile}
+\subsection{}
+Selon les hypothèses de la question précédente concernants l'independence des variable aléatoires, on aura clairement que l'échantillon $\displaystyle \theta^{*}_{n,1}, \hdots, \theta^{*}_{n,M}$  est $\displaystyle iid$. Ce qui permet d'utiliser le TCL en se rappelant des résultats de la question $\displaystyle 3.1$,
+$$\sqrt{M}\left(\frac{1}{M}\sum_{j=1}^{M}\theta^{*}_{n,j}-\frac{1}{n}\sum_{i=1}^{n}X_i\right)\overset{d}{\longrightarrow}\mathcal{N}(0,Var[\theta^{*}_{n}])$$
+lorsque $\displaystyle M\to \infty$, où $\displaystyle Var[\theta^{*}_{n}]=\frac{V_n}{n}$.\\
+On a encore que la loi des grands nombres et l'utilisation de la méthode de "plug-in", comme fait pour la question 2.2, impliquent, 
+$$V^{(boot)}_{n,M}\overset{p.s.}{\longrightarrow}\frac{V_{n}}{n}$$
+lorsque $\displaystyle M\to\infty$ où $\displaystyle V^{(boot)}_{n,M}=\frac{1}{M}\sum_{j=1}^{M}(\bar X^{*}_{n,j})^2-\left(\frac{1}{M}\sum_{j=1}^{M}\bar X^{*}_{n,j}\right)^2$. \\
+De cette façon, on utilise le lemme de Slutsky, pour $\displaystyle g(a,b)=\frac{a}{b^{1/2}}$,
+$$\sqrt{\frac{M}{ V^{(boot)}_{n,M}}}\left(\frac{1}{M}\sum_{j=1}^{M}\theta^{*}_{n,j}-\frac{1}{n}\sum_{i=1}^{n}X_i\right)\overset{d}{\longrightarrow}\mathcal{N}(0,1)$$
+lorsque $\displaystyle M\to\infty$. \\
+Comme conséquence directe de la convergence en loi,
+$$F_{n,M}\overset{M\to\infty}{\longrightarrow}\Phi_{\mathcal{N}(\bar X_n, V_n/n)}(x)$$
+Ce qui justifie la construction précédente.
+\subsection{Thomas}
+\subsection{}
+En utilisant la fonction monotone donnée, on aura l'échantillon $\displaystyle \rho(\theta^{*}_{n,1}), \hdots, \rho(\theta^{*}_{n,M})$ qui, par le même raisonnement de la question 4.1, engendre la fonction répartition $\displaystyle Q_{n,M}$ et sa convergence en loi ci-dessus,
+$$Q_{n,M}\overset{M\to\infty}{\longrightarrow}\Phi_{\mathcal{N}(\rho(\theta),Var[\rho(\bar X_n)])}(x)$$
+en se rappelant que $\displaystyle \rho(\bar X_n)$ est une variable gaussienne de moyenne $\displaystyle \rho(\theta)$. \\ \\
+Cela nous permettra cette fois-ci d'analyser l'intervalle de précision de $\theta$ en liant l'échantillon original étudié aux $M$ échantillons de taille $n$ établis, manipulation qui n'était pas possible pour la question $4.1$, car la loi à laquelle $F_{n,m}$ convergeait n'était pas centrée sur $\theta$, mais si sur $\bar X_n$. \\ \\
+Finalement, en utilisant le fait que la fonction $\displaystyle x\leadsto \rho(x)$ est monotone on peut l'applique à l'inégalité réprésenttant l'intervalle de précision, c'est-à-dire,
+$$\mathbb{P}\left(\theta \in I^{(p-boot)}_{n,M,\alpha}}\right)=\mathbb{P}\left(F^{-1}_{n,M}\left(\alpha/2\right)\leq \theta \leq F^{-1}_{n,M}\left(1-\alpha/2\right)\right)$$
+égal à,
+$$\mathbb{P}\left(Q^{-1}_{n,M}\left(\alpha/2\right)\leq \rho(\theta) \leq Q^{-1}_{n,M}\left(1-\alpha/2\right)\right)=1-\frac{\alpha}{2}-\frac{\alpha}{2}=1-\alpha$$
+
 %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%
-\\
-\\
-\\ {\Huge Daqui pra frente é ladainha mas deixe aí que talvez precise}
-
-
-Il nous est proposé l'approximation suivante:
-$$\vartheta=\bar X_n + \frac{v}{\sqrt{n}}\xi_n$$
-On cherche donc la fonction de vraisemblance associé à l'expérience produit,
-$$\vartheta \in \Theta \leadsto \mathcal{L}_n(\vartheta,X_1,...,X_n )= \prod_{i=1}^nf(\vartheta,X_i) $$
-En sachant la loi de $\displaystyle \xi_n$ et sa distribuition, on trouve,
-$$\mathbb{P}(dx)=\frac{1}{\sqrt{2\pi v^2}}e^{-n(\vartheta-\bar x_n)/2}dx$$
-Comme $\displaystyle \mu(dx)>> \mathbb{P}(dx)$, on peut faire $\displaystyle f(\vartheta)=\frac{1}{\sqrt{2\pi v^2}}e^{-n(\vartheta-\bar x_n)/2}$
-
-Alors,
-$$\mathcal{L}_n(\vartheta,X_1,...,X_n )=(2\pi v^2)^{-n/2}e^{-n/2\sum_{i=1}^n(\vartheta - \bar X_ n)}$$
-$$\ell_n(\vartheta,X_1,...,X_n )=-\frac{n}{2}(2\pi v^2)-\frac{n^2}{2}(\vartheta-\bar X_n)^2$$
-$$\frac{d\ell_n}{d\vartheta}(\vartheta,X_1,...,X_n )=0 \Rightarrow\hat \vartheta_n=\frac{1}{n}\sum_{i=1}^nX_i$$
-Donc $\displaystyle \vartheta$ est bien le estimateur par la moyenne empirique.
-
-
-
-En ayant la suite de variables aléatoires $\displaystyle (X_1,...,X_n) $ iid de même loi de distribuition $\displaystyle g(x)$ dont:
-$$\mu = \mean[X_i] = 0 \Rightarrow \mean[\sum_{i=1}^n X_i ] = 0 $$
-Encore pour la variance, on appelle
-
-$$\displaystyle v^2 = \int_{\cal \R} x^2g(x)dx = \mean[X_i^2]$$
-puis que
-$$\displaystyle Var[X_i] = \mean[X_i^2]-\mean^2[X_i] $$
-De cette façon,
-$$v_{somme}^2=\mean[\sum_{i=1}^n X_i ]= nv^2$$
-
-
-On se rappelle donc que $\displaystyle\vartheta = \bar X_n + \frac{v}{\sqrt{n}}\xi_n$ est valable selon les données précedentes et l'application direct du Théorème Central Limite.
-
-Alors, pour $\displaystyle \alpha\in(0,1)$,
-$$\mathbb{P}(|\bar X_n |<\varepsilon)>1-\alpha$$
-$$\lim_{n \to \infty}\mathbb{P}(\xi_n \leq \varepsilon)=\Phi(x) = \int_{-\infty}^xe^{-u^2/2}\frac{du}{\sqrt{2\pi}}$$
 
 \end{document}
-
-
